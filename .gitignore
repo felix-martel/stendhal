@@ -1,0 +1,6 @@
+private/
+__idea__/
+__pycache__/
+.ipynb_checkpoints/
+data/hugo/
+data/shakespeare_train.txt
