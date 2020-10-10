@@ -28,7 +28,7 @@ class NgramModel(abc.ABC):
         weights = [self.proba(w, context) for w in self.vocab]
         return random.choices(self.vocab, weights=weights, k=1)[0]
 
-    def generate(self, start: Optional[Iterable[str]] = None, n_words: Optional[int] = None):
+    def generate(self, start: Optional[Iterable[str]] = None, n_words: Optional[int] = None, max_words: int = 1000):
         if start is None:
             # Create empty context
             start = [SOS] * (self.n - 1)
@@ -38,12 +38,13 @@ class NgramModel(abc.ABC):
         generated = [*start]
         n_generated = 0
         # Fail-safe in case no <eos> is generated
-        _max_words = n_words if n_words is not None else 10000
+        if n_words is not None:
+            max_words = n_words
         while True:
             token = self.predict_next(generated[-self.n+1:])
             generated.append(token)
             n_generated += 1
-            if (n_words is not None and n_generated >= n_words) or n_generated > _max_words:
+            if (n_words is not None and n_generated >= n_words) or n_generated > max_words:
                 return generated
             if token == EOS:
                 if n_words is None:
