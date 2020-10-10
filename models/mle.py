@@ -18,4 +18,4 @@ class MLE(NgramModel):
     def predict_next(self, context: List[str]) -> str:
         if context not in self.counts:
             return random.choice(self.vocab)
-        super().predict_next(context)
+        return super().predict_next(context)
