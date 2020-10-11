@@ -1,12 +1,13 @@
 import random
-from typing import List
+from typing import List, Optional
 
+from common.typing import TokenizedCorpus
 from .abc import NgramModel
 
 
 class MLE(NgramModel):
-    def __init__(self, corpus, n):
-        super().__init__(corpus, n)
+    def __init__(self, corpus : TokenizedCorpus, n : int, vocab : Optional[List[str]] = None):
+        super().__init__(corpus, n, vocab)
         self.counts = self.count_ngrams(corpus, self.n-1, self.n)
 
     def proba(self, word: str, context: List[str]):

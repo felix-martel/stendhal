@@ -5,14 +5,16 @@ from itertools import chain
 from typing import List, Optional, Iterable
 from common.ngram import NgramCounter, extract_ngrams
 from common.constants import SOS, EOS
-
+from common.typing import TokenizedCorpus
 
 class NgramModel(abc.ABC):
-    def __init__(self, corpus, n):
+    def __init__(self, corpus : TokenizedCorpus, n : int, vocab : Optional[List[str]] = None):
         if n < 1:
             raise ValueError("`n` must be at least 1.")
         self.n = n
-        self.vocab = list(set(chain(*corpus)) | {SOS, EOS})
+        if vocab is None:
+            vocab = list(set(chain(*corpus)) | {SOS, EOS})
+        self.vocab = vocab
 
     @classmethod
     def count_ngrams(cls, corpus: List[List[str]], n: int, m: Optional[int] = None) -> NgramCounter:

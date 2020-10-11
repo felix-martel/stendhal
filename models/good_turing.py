@@ -1,15 +1,16 @@
 import random
 from collections import Counter
-from typing import List
+from typing import List, Optional
 
+from common.typing import TokenizedCorpus
 from .abc import NgramModel
 from common.ngram import NgramCounter, NgramLike
 from .mle import MLE
 
 
 class GoodTuring(MLE):
-    def __init__(self, corpus, n, stop_discounting_at=4):
-        super().__init__(corpus, n)
+    def __init__(self, corpus : TokenizedCorpus, n : int, vocab : Optional[List[str]] = None, stop_discounting_at=4):
+        super().__init__(corpus, n, vocab)
         self.smoothed = self.smooth_counts(self.counts, stop_discounting_at)
 
     def smooth_counts(self, raw_counts: NgramCounter, stop_discounting: int = 4):
